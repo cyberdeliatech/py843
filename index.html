@@ -143,14 +143,13 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="#home" onclick="navigateTo('home')" class="group flex flex-col">
-        <span class="font-display text-2xl md:text-3xl tracking-[0.25em] text-ivory group-hover:text-champagne transition-colors uppercase font-medium">
-          Privately Yours
-        </span>
-        <span class="text-[9px] uppercase tracking-[0.35em] text-taupe font-medium -mt-1">
-          Personal Chef • Lowcountry SC
-        </span>
-      </a>
+<a href="#home" onclick="navigateTo('home')" class="group flex flex-col">
+  <img
+    src="https://cyberdeliatech.github.io/py843/assets/img/logo.png"
+    alt="Privately Yours — Personal Chef, Lowcountry SC"
+    class="h-auto md:h-auto w-32 object-contain transition-opacity group-hover:opacity-80"
+  />
+</a>
 
       <!-- Desktop Navigation Links -->
       <nav class="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-[0.25em] font-medium text-ivory/80">
@@ -199,15 +198,15 @@
       <canvas id="hero-canvas"></canvas>
 
       <!-- Background Image Overlay with Dark Gradient Vignette -->
-      <div class="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop" 
-          alt="Chef preparing fresh meal in lowcountry kitchen" 
-          class="w-full h-full object-cover opacity-30 scale-105 transition-transform duration-1000" 
-          id="hero-bg-img"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/65 to-charcoal/85"></div>
-      </div>
+<div class="absolute inset-0 z-0 flex items-center justify-center">
+  <img
+    src="https://cyberdeliatech.github.io/py843/assets/img/logo.png"
+    alt="Chef preparing fresh meal in lowcountry kitchen"
+    class="w-full h-full object-contain object-center opacity-30 transition-transform duration-1000"
+    id="hero-bg-img"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/65 to-charcoal/85"></div>
+</div>
 
       <!-- Hero Typography & Call To Action Block -->
       <div class="relative z-10 max-w-4xl mx-auto text-center space-y-8 mt-12">
@@ -807,7 +806,13 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
       
       <div class="space-y-4">
-        <span class="font-display text-2xl tracking-[0.25em] uppercase text-ivory block">Privately Yours</span>
+        <a href="#home" onclick="navigateTo('home')" class="group flex flex-col">
+  <img
+    src="https://cyberdeliatech.github.io/py843/assets/img/logo_txt.png"
+    alt="Privately Yours — Personal Chef, Lowcountry SC"
+    class="h-auto md:h-auto w-32 object-contain transition-opacity group-hover:opacity-80"
+  />
+</a>
         <p class="text-taupe leading-relaxed">
           Premium personal chef & in-home dining service delivering culinary craftsmanship to Beaufort and the South Carolina Lowcountry.
         </p>
@@ -1011,15 +1016,7 @@
         const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
         light.intensity = 0.8;
 
-        // Create 3D Floating Ambient Wireframe Champagne Sphere in Background
-        const sphere = BABYLON.MeshBuilder.CreateIcoSphere('champagneSphere', { radius: 6.5, subdivisions: 3 }, scene);
-        sphere.position = new BABYLON.Vector3(0, 0, 2);
         
-        const sphereMat = new BABYLON.StandardMaterial('sphereMat', scene);
-        sphereMat.wireframe = true;
-        sphereMat.emissiveColor = new BABYLON.Color3(0.78, 0.70, 0.54); // Champagne #C8B38A
-        sphereMat.alpha = 0.12;
-        sphere.material = sphereMat;
 
         // Create Point Cloud System for Stardust Particles
         const pcs = new BABYLON.PointsCloudSystem('pcs', 1.5, scene);
@@ -1055,10 +1052,7 @@
         scene.registerBeforeRender(() => {
           time += 0.015;
           
-          // Rotate Champagne Wireframe Sphere
-          sphere.rotation.y = time * 0.08;
-          sphere.rotation.x = time * 0.04;
-
+          
           // Camera subtle mouse parallax
           camera.position.x += (mouseX - camera.position.x) * 0.03;
           camera.position.y += (-mouseY - camera.position.y) * 0.03;
