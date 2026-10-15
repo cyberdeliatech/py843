@@ -134,7 +134,38 @@
       pointer-events: none;
       transform: translateY(-10px);
     }
-  </style>
+    
+  
+
+/* Continuous, seamless sensory-gallery carousel (Mama Mia-style motion) */
+#dish-carousel .overflow-hidden { width: 100%; position: relative; }
+#dish-carousel-track {
+  display: flex;
+  width: max-content;
+  max-width: none;
+  transform: translate3d(0, 0, 0);
+  transition: none !important;
+  will-change: transform;
+}
+#dish-carousel-track > .dish-slide {
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  min-width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  #dish-carousel-track { will-change: auto; }
+}
+
+/* Dish image lightbox */
+#dish-lightbox { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(8, 8, 10, .92); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility .25s ease; }
+#dish-lightbox.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+#dish-lightbox-image { display: block; max-width: min(92vw, 1400px); max-height: 86vh; width: auto; height: auto; object-fit: contain; border: 1px solid rgba(255,255,255,.16); box-shadow: 0 24px 80px rgba(0,0,0,.55); }
+#dish-lightbox-close { position: absolute; top: 18px; right: 22px; width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.1); color: white; font-size: 30px; line-height: 1; cursor: pointer; }
+#dish-lightbox-close:hover { background: rgba(255,255,255,.2); }
+#dish-carousel .dish-slide img { cursor: zoom-in; }
+@media (prefers-reduced-motion: reduce) { #dish-lightbox { transition: none; } }
+
+</style>
 </head>
 <body class="selection:bg-champagne selection:text-charcoal">
 
@@ -596,42 +627,53 @@
       </div>
     </section>
 
-    <!-- 9. SENSORY EXPERIENCE GALLERY (4-ITEM PHOTO GRID) -->
-    <section class="py-24 px-6 md:px-12 bg-charcoal-deep text-ivory border-t border-white/5">
-      <div class="max-w-7xl mx-auto space-y-12">
-        <div class="text-center space-y-3">
-          <span class="text-xs uppercase tracking-[0.35em] text-champagne font-medium">Visual Harmony</span>
-          <h2 class="text-3xl md:text-5xl font-normal tracking-[0.2em]">The Sensory Experience</h2>
-        </div>
+    <!-- 9. SENSORY EXPERIENCE GALLERY (15-IMAGE CAROUSEL) --> <section id="sensory-gallery" class="py-24 px-6 md:px-12 bg-charcoal-deep text-ivory border-t border-white/5"> <div class="max-w-7xl mx-auto space-y-12">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="reveal-image-wrapper rounded-sm overflow-hidden border border-white/10 group h-80">
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop" alt="Seared scallops with pea puree" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <span class="text-xs font-editorial italic text-champagne-light">Pan-seared coastal scallops & herbs</span>
-            </div>
-          </div>
-          <div class="reveal-image-wrapper rounded-sm overflow-hidden border border-white/10 group h-80">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop" alt="Artisanal steak dinner" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <span class="text-xs font-editorial italic text-champagne-light">Prime beef tenderloin & red wine reduction</span>
-            </div>
-          </div>
-          <div class="reveal-image-wrapper rounded-sm overflow-hidden border border-white/10 group h-80">
-            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=800&auto=format&fit=crop" alt="Fresh organic salad" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <span class="text-xs font-editorial italic text-champagne-light">Local Lowcountry greens & heirloom citrus</span>
-            </div>
-          </div>
-          <div class="reveal-image-wrapper rounded-sm overflow-hidden border border-white/10 group h-80">
-            <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop" alt="Artisanal dessert finish" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <span class="text-xs font-editorial italic text-champagne-light">Handcrafted chocolate ganache tart</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="text-center space-y-3"> <span class="text-xs uppercase tracking-[0.35em] text-champagne font-medium">Visual Harmony</span> <h2 class="text-3xl md:text-5xl font-normal tracking-[0.2em]">The Sensory Experience</h2> <p class="text-sm text-taupe font-light">A glimpse into the art of personalized dining.</p> </div>
+
+<!-- Carousel Container --> <div id="dish-carousel" class="relative group">
+
+<!-- Viewport --> <div class="overflow-hidden rounded-sm border border-white/10"> <div id="dish-carousel-track" class="flex transition-transform duration-700 ease-in-out" style="transform: translateX(0%);" >
+
+<!-- Dish 1 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(1).webp" alt="Signature culinary dish 1" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">A Taste of the Lowcountry</span> </div> </div> </div>
+
+<!-- Dish 2 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(2).webp" alt="Signature culinary dish 2" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Thoughtfully Crafted Flavors</span> </div> </div> </div>
+
+<!-- Dish 3 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(3).webp" alt="Signature culinary dish 3" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Fresh Seasonal Ingredients</span> </div> </div> </div>
+
+<!-- Dish 4 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(4).webp" alt="Signature culinary dish 4" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Elevated Everyday Dining</span> </div> </div> </div>
+
+<!-- Dish 5 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(5).webp" alt="Signature culinary dish 5" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Artistry on Every Plate</span> </div> </div> </div>
+
+<!-- Dish 6 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(6).webp" alt="Signature culinary dish 6" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Inspired by the Coast</span> </div> </div> </div>
+
+<!-- Dish 7 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(7).webp" alt="Signature culinary dish 7" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Seasonal Culinary Creations</span> </div> </div> </div>
+
+<!-- Dish 8 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(8).webp" alt="Signature culinary dish 8" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Made Fresh in Your Home</span> </div> </div> </div>
+
+<!-- Dish 9 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(9).webp" alt="Signature culinary dish 9" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">The Beauty of Simplicity</span> </div> </div> </div>
+
+<!-- Dish 10 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(10).webp" alt="Signature culinary dish 10" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">An Elevated Dining Experience</span> </div> </div> </div>
+
+<!-- Dish 11 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(11).webp" alt="Signature culinary dish 11" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Prepared with Intention</span> </div> </div> </div>
+
+<!-- Dish 12 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(12).webp" alt="Signature culinary dish 12" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">A Celebration of Freshness</span> </div> </div> </div>
+
+<!-- Dish 13 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(13).webp" alt="Signature culinary dish 13" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Crafted for Your Table</span> </div> </div> </div>
+
+<!-- Dish 14 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(14).webp" alt="Signature culinary dish 14" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">Personalized Culinary Luxury</span> </div> </div> </div>
+
+<!-- Dish 15 --> <div class="dish-slide min-w-0 shrink-0 w-full sm:w-1/2 lg:w-1/3 p-2"> <div class="reveal-image-wrapper relative h-80 md:h-[420px] rounded-sm overflow-hidden group/card"> <img src="https://cyberdeliatech.github.io/py843/assets/img/dishes/dish%20(15).webp" alt="Signature culinary dish 15" loading="lazy" class="w-full h-full object-cover" /> <div class="absolute inset-0 bg-gradient-to-t from-charcoal-deep/90 via-transparent to-transparent opacity-80 flex items-end p-6"> <span class="text-sm font-editorial italic text-champagne-light">The Final Touch</span> </div> </div> </div>
+
+</div> </div>
+
+<!-- Previous Button --> <button id="dish-prev" type="button" aria-label="Previous dishes" class="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full border border-champagne/50 bg-charcoal-deep/90 text-champagne hover:bg-champagne hover:text-charcoal transition-all shadow-lg" > <i class="fa-solid fa-chevron-left"></i> </button>
+
+<!-- Next Button --> <button id="dish-next" type="button" aria-label="Next dishes" class="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full border border-champagne/50 bg-charcoal-deep/90 text-champagne hover:bg-champagne hover:text-charcoal transition-all shadow-lg" > <i class="fa-solid fa-chevron-right"></i> </button> </div>
+
+<!-- Carousel Pagination --> <div class="flex flex-col sm:flex-row items-center justify-center gap-5"> <div id="dish-pagination" class="flex items-center justify-center gap-2" aria-label="Choose carousel page"></div> <span id="dish-counter" class="text-xs tracking-[0.2em] text-taupe tabular-nums" aria-live="polite">01 / 15</span> </div>
+
+</div> </section>
 
     <!-- 10. FAQ ACCORDION -->
     <section id="faq" class="py-24 px-6 md:px-12 bg-ivory text-charcoal">
@@ -1085,12 +1127,286 @@
       }
     }
 
+/* -------------------------------------------------- */
+/* 7. Sensory Gallery Carousel                        */
+/* -------------------------------------------------- */
+function initDishCarousel() {
+  const carousel = document.getElementById('dish-carousel');
+  const viewport = carousel?.querySelector('.overflow-hidden');
+  const track = document.getElementById('dish-carousel-track');
+  const pagination = document.getElementById('dish-pagination');
+  const counter = document.getElementById('dish-counter');
+  const prevBtn = document.getElementById('dish-prev');
+  const nextBtn = document.getElementById('dish-next');
+
+  if (!carousel || !viewport || !track || !pagination || !counter) return;
+
+  // Keep a stable list of the original slides; clones are created from this list.
+  const originals = Array.from(track.querySelectorAll('.dish-slide'))
+    .filter(slide => !slide.hasAttribute('data-carousel-clone'));
+  const total = originals.length;
+  if (!total) return;
+
+  const SPEED_PX_PER_SECOND = 45; // Continuous pixel-per-second motion, matching the reference page.
+  let position = 0;
+  let setWidth = 0;
+  let slideWidth = 0;
+  let visibleSlides = 1;
+  let lastTime = 0;
+  let paused = false;
+  let touchStartX = 0;
+  let animationFrame = null;
+  let resizeTimer = null;
+  let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Stop the Tailwind transform transition: movement is driven by requestAnimationFrame.
+  track.style.transition = 'none';
+  track.style.width = 'max-content';
+  track.style.maxWidth = 'none';
+  track.style.willChange = reducedMotion ? 'auto' : 'transform';
+
+  function getVisibleSlides() {
+    if (window.innerWidth >= 1024) return Math.min(3, total);
+    if (window.innerWidth >= 640) return Math.min(2, total);
+    return 1;
+  }
+
+  function getRealIndex() {
+    if (!slideWidth) return 0;
+    return Math.floor((position % setWidth) / slideWidth) % total;
+  }
+
+  function updateUI() {
+    const realIndex = getRealIndex();
+    counter.textContent = `${String(realIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+
+    Array.from(pagination.children).forEach((dot, i) => {
+      const active = i === realIndex;
+      dot.classList.toggle('w-7', active);
+      dot.classList.toggle('w-2', !active);
+      dot.classList.toggle('bg-champagne', active);
+      dot.classList.toggle('bg-taupe/40', !active);
+      dot.setAttribute('aria-current', String(active));
+    });
+  }
+
+  function applySlideWidths() {
+    visibleSlides = getVisibleSlides();
+    const viewportWidth = viewport.clientWidth;
+    slideWidth = viewportWidth / visibleSlides;
+
+    originals.forEach(slide => {
+      slide.style.flex = `0 0 ${slideWidth}px`;
+      slide.style.width = `${slideWidth}px`;
+    });
+  }
+
+  function rebuildClones() {
+    track.querySelectorAll('[data-carousel-clone="true"]').forEach(node => node.remove());
+
+    // A complete duplicate set ensures the track can wrap without a blank gap.
+    originals.forEach(original => {
+      const clone = original.cloneNode(true);
+      clone.dataset.carouselClone = 'true';
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(el => {
+        el.setAttribute('tabindex', '-1');
+      });
+      track.appendChild(clone);
+    });
+
+    setWidth = originals.reduce((sum, slide) => sum + slide.getBoundingClientRect().width, 0);
+    if (setWidth > 0) position = ((position % setWidth) + setWidth) % setWidth;
+    track.style.transform = `translate3d(${-position}px, 0, 0)`;
+  }
+
+  function buildPagination() {
+    pagination.innerHTML = '';
+
+    originals.forEach((slide, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Move to dish ${i + 1}`);
+      dot.setAttribute('aria-current', 'false');
+      dot.className = 'h-2 w-2 rounded-full transition-all duration-300 bg-taupe/40 hover:bg-champagne/70';
+      dot.addEventListener('click', () => {
+        if (!setWidth) return;
+        position = (i * slideWidth) % setWidth;
+        track.style.transform = `translate3d(${-position}px, 0, 0)`;
+        updateUI();
+        lastTime = performance.now();
+      });
+      pagination.appendChild(dot);
+    });
+  }
+
+  function measureAndBuild(resetPosition = false) {
+    const previousIndex = getRealIndex();
+    applySlideWidths();
+    rebuildClones();
+    if (!resetPosition && setWidth > 0) {
+      position = (previousIndex * slideWidth) % setWidth;
+      track.style.transform = `translate3d(${-position}px, 0, 0)`;
+    } else {
+      position = 0;
+      track.style.transform = 'translate3d(0, 0, 0)';
+    }
+    updateUI();
+  }
+
+  // Manual controls remain available; normal movement stays continuously animated.
+  function nudge(direction) {
+    if (!setWidth) return;
+    position = ((position + direction * slideWidth) % setWidth + setWidth) % setWidth;
+    track.style.transform = `translate3d(${-position}px, 0, 0)`;
+    updateUI();
+    lastTime = performance.now();
+  }
+
+  if (nextBtn) nextBtn.addEventListener('click', () => nudge(1));
+  if (prevBtn) prevBtn.addEventListener('click', () => nudge(-1));
+
+  // Match the reference carousel: pause on hover and touch, then resume smoothly.
+  carousel.addEventListener('mouseenter', () => { paused = true; });
+  carousel.addEventListener('mouseleave', () => { paused = false; lastTime = performance.now(); });
+  carousel.addEventListener('touchstart', event => {
+    touchStartX = event.changedTouches[0].screenX;
+    paused = true;
+  }, { passive: true });
+  carousel.addEventListener('touchend', event => {
+    const diff = touchStartX - event.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) nudge(diff > 0 ? 1 : -1);
+    paused = false;
+    lastTime = performance.now();
+  }, { passive: true });
+
+  // Keyboard support for the existing arrow controls.
+  carousel.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      nudge(1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      nudge(-1);
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    lastTime = performance.now();
+  });
+
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const handleMotionPreference = event => {
+    reducedMotion = event.matches;
+    track.style.willChange = reducedMotion ? 'auto' : 'transform';
+  };
+  if (motionQuery.addEventListener) motionQuery.addEventListener('change', handleMotionPreference);
+  else if (motionQuery.addListener) motionQuery.addListener(handleMotionPreference);
+
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => measureAndBuild(false), 150);
+  }, { passive: true });
+
+  function animate(time) {
+    if (!lastTime) lastTime = time;
+    const delta = Math.min((time - lastTime) / 1000, 0.05);
+    lastTime = time;
+
+    if (!paused && !document.hidden && setWidth > 0) {
+      position += SPEED_PX_PER_SECOND * delta;
+      if (position >= setWidth) position -= setWidth;
+      track.style.transform = `translate3d(${-position}px, 0, 0)`;
+      updateUI();
+    }
+
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  // Click any original or cloned dish image to open it in a full-screen popup.
+  const lightbox = document.getElementById('dish-lightbox');
+  const lightboxImage = document.getElementById('dish-lightbox-image');
+  const lightboxClose = document.getElementById('dish-lightbox-close');
+  let lastFocusedElement = null;
+
+  function openLightbox(img) {
+    if (!lightbox || !lightboxImage || !img) return;
+    lastFocusedElement = document.activeElement;
+    lightboxImage.src = img.currentSrc || img.src;
+    lightboxImage.alt = img.alt || 'Enlarged dish image';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    paused = true;
+    lightboxClose?.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    paused = false;
+    lastTime = performance.now();
+    if (lightboxImage) lightboxImage.src = '';
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus({ preventScroll: true });
+    }
+  }
+
+  track.addEventListener('click', event => {
+    const img = event.target.closest('.dish-slide img');
+    if (img) {
+      event.preventDefault();
+      openLightbox(img);
+    }
+  });
+
+  track.querySelectorAll('.dish-slide img').forEach(img => {
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', `Enlarge ${img.alt || 'dish image'}`);
+    img.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', event => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && lightbox?.classList.contains('is-open')) {
+      closeLightbox();
+    }
+  });
+
+  // Initialize widths after layout is available, then start the endless animation.
+  measureAndBuild(true);
+  buildPagination();
+  updateUI();
+
+  // Re-measure after the browser finishes layout/image loading.
+  window.addEventListener('load', () => measureAndBuild(false), { once: true });
+  animationFrame = requestAnimationFrame(animate);
+}
     /* -------------------------------------------------- */
-    /* 7. Initialization Call                              */
+    /* 8. Initialization Call                              */
     /* -------------------------------------------------- */
     calculateTotal();
     initScrollAnimations();
     initHeroParticles();
+    initDishCarousel();
   </script>
+
+<!-- Dish Image Popup / Lightbox -->
+<div id="dish-lightbox" role="dialog" aria-modal="true" aria-label="Enlarged dish image" aria-hidden="true">
+  <button id="dish-lightbox-close" type="button" aria-label="Close enlarged image">&times;</button>
+  <img id="dish-lightbox-image" src="" alt="Enlarged dish image" />
+</div>
+
 </body>
 </html>
